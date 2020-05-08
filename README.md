@@ -4,7 +4,7 @@ This mod attempts to implement the Psychic class for the Pathfinder Kingmaker cR
 
 You will need the mods Unity Mod Manager and the Call of the Wild version 1.82e or later and CowWithHatsCustomSpellsMod
 
-They be accessed here and here respectively
+They be accessed with the following links
 
 https://www.nexusmods.com/site/mods/21?tab=files
 
