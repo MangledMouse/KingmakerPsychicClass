@@ -128,13 +128,13 @@ namespace PsychicClassMod
                 {
                     Main.DebugLog("Loading PsychicClassMod after Call of the Wild");
 
-                    //CallOfTheWild.LoadIcons.Image2Sprite.icons_folder = @"./Mods/PsychicClassMod/Icons/";
+                    CallOfTheWild.LoadIcons.Image2Sprite.icons_folder = @"./Mods/PsychicClassMod/Icons/";
 #if DEBUG                
                     bool allow_guid_generation = true;
 #else
                     bool allow_guid_generation = false; //no guids should be ever generated in release
 #endif
-                    //CallOfTheWild.Helpers.GuidStorage.load(Properties.Resources.blueprints, allow_guid_generation);
+                    CallOfTheWild.Helpers.GuidStorage.load(Properties.Resources.blueprints, allow_guid_generation);
 
                     //logger.Log("Made it to post load");
                     Main.logger.Log("Made it to post fix for after call");

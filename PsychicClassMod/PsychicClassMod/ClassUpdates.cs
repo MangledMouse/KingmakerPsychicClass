@@ -36,28 +36,28 @@ namespace PsychicClassMod
             BlueprintFeature relentlessCasting = engine.createRelentlessCasting();
 
             BlueprintFeatureSelection phrenicDabbler = library.Get<BlueprintFeatureSelection>("f5ab5bf71394419a87072445c46d3e79");
-            //phrenicDabbler.AllFeatures.AddToArray<BlueprintFeature>(relentlessCasting);
-            BlueprintFeature focused_force = engine.createFocusedForce();
-            BlueprintFeature biokinetic_healing = engine.createBiokineticHealing();
-            BlueprintFeature conjured_armor = engine.createConjuredArmor();
-            BlueprintFeature defensive_prognostication = engine.createDefensivePrognostication();
-            BlueprintFeature minds_eye = engine.createMindsEye();
-            BlueprintFeature overpowering_mind = engine.createOverpoweringMind();
-            BlueprintFeature will_of_the_dead = engine.createWillOfTheDead();
-            BlueprintFeature ongoing_defense = engine.createOngoingDefense();
+            phrenicDabbler.AllFeatures.AddToArray<BlueprintFeature>(relentlessCasting);
+            //BlueprintFeature focused_force = engine.createFocusedForce();
+            //BlueprintFeature biokinetic_healing = engine.createBiokineticHealing();
+            //BlueprintFeature conjured_armor = engine.createConjuredArmor();
+            //BlueprintFeature defensive_prognostication = engine.createDefensivePrognostication();
+            //BlueprintFeature minds_eye = engine.createMindsEye();
+            //BlueprintFeature overpowering_mind = engine.createOverpoweringMind();
+            //BlueprintFeature will_of_the_dead = engine.createWillOfTheDead();
+            //BlueprintFeature ongoing_defense = engine.createOngoingDefense();
 
-            phrenicDabbler.AllFeatures = new BlueprintFeature[]
-            {
-                biokinetic_healing,
-                conjured_armor,
-                defensive_prognostication,
-                focused_force,
-                minds_eye,
-                overpowering_mind,
-                will_of_the_dead,
-                ongoing_defense,
-                relentlessCasting
-            };
+            //phrenicDabbler.AllFeatures = new BlueprintFeature[]
+            //{
+            //    biokinetic_healing,
+            //    conjured_armor,
+            //    defensive_prognostication,
+            //    focused_force,
+            //    minds_eye,
+            //    overpowering_mind,
+            //    will_of_the_dead,
+            //    ongoing_defense,
+            //    relentlessCasting
+            //};
         }
     }
 }
