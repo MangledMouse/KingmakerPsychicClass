@@ -1,6 +1,6 @@
 Psychic Class mod
 
-This mod attempts to implement the Psychic class with appropriate changes to base Class Features, Psychic Disciplines and Phrenic Amplifications to be useable in the cRPG
+This mod attempts to implement the Psychic class for the Pathfinder Kingmaker cRPG. It makes appropriate changes to base Class Features, Psychic Disciplines and Phrenic Amplifications to be useable in the cRPG
 
 You will need the mods Unity Mod Manager and the Call of the Wild version 1.82e or later and CowWithHatsCustomSpellsMod
 
