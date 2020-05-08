@@ -12,6 +12,6 @@ https://www.nexusmods.com/pathfinderkingmaker/mods/112?tab=files
 
 https://www.nexusmods.com/pathfinderkingmaker/mods/175?tab=files
 
-To install this, custom spells or Call of the Wild, you will first need to unzip the UnityModManager zip, run it, and link it to the Pathfinder Kingmaker install folder. Drag the zip from this mod and the zip from Call of the Wild into UMM and that should be it. 
+To install this, CustomSpells or Call of the Wild, you will first need to unzip the UnityModManager zip, run it, and link it to the Pathfinder Kingmaker install folder. Drag the zip from this mod, from the CustomSpells mod and the zip from Call of the Wild into UMM and that should be it. 
 
 Have fun!
