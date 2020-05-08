@@ -1,0 +1,10 @@
+C:\Users\Chris\Documents\kingmaker stuff\mods\MyCreatedMods\PsychicClassMod\PsychicClassMod\PsychicClassMod\bin\Release\PsychicClassMod\blueprints.txt
+C:\Users\Chris\Documents\kingmaker stuff\mods\MyCreatedMods\PsychicClassMod\PsychicClassMod\PsychicClassMod\bin\Release\PsychicClassMod\info.json
+C:\Users\Chris\Documents\kingmaker stuff\mods\MyCreatedMods\PsychicClassMod\PsychicClassMod\PsychicClassMod\bin\Release\PsychicClassMod\settings.json
+C:\Users\Chris\Documents\kingmaker stuff\mods\MyCreatedMods\PsychicClassMod\PsychicClassMod\PsychicClassMod\bin\Release\PsychicClassMod\PsychicClassMod.dll
+C:\Users\Chris\Documents\kingmaker stuff\mods\MyCreatedMods\PsychicClassMod\PsychicClassMod\PsychicClassMod\bin\Release\PsychicClassMod\PsychicClassMod.pdb
+C:\Users\Chris\Documents\kingmaker stuff\mods\MyCreatedMods\PsychicClassMod\PsychicClassMod\PsychicClassMod\obj\Release\PsychicClassMod.csprojAssemblyReference.cache
+C:\Users\Chris\Documents\kingmaker stuff\mods\MyCreatedMods\PsychicClassMod\PsychicClassMod\PsychicClassMod\obj\Release\PsychicClassMod.Properties.Resources.resources
+C:\Users\Chris\Documents\kingmaker stuff\mods\MyCreatedMods\PsychicClassMod\PsychicClassMod\PsychicClassMod\obj\Release\PsychicClassMod.csproj.GenerateResource.cache
+C:\Users\Chris\Documents\kingmaker stuff\mods\MyCreatedMods\PsychicClassMod\PsychicClassMod\PsychicClassMod\obj\Release\PsychicClassMod.dll
+C:\Users\Chris\Documents\kingmaker stuff\mods\MyCreatedMods\PsychicClassMod\PsychicClassMod\PsychicClassMod\obj\Release\PsychicClassMod.pdb
