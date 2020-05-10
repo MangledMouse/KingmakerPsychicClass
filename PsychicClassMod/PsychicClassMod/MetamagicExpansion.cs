@@ -26,30 +26,27 @@ namespace PsychicClassMod
 
         public interface IRuleSpellResistanceTriggered : IGlobalSubscriber
         {
-            void ruleSavingThrowTriggered(RuleSpellResistanceCheck evt);
+            void ruleSpellResistanceCheckTriggered(RuleSpellResistanceCheck evt);
         }
 
         [Harmony12.HarmonyPatch(typeof(RuleSpellResistanceCheck))]
         [Harmony12.HarmonyPatch("OnTrigger", Harmony12.MethodType.Normal)]
-        static class RuleSavingThrow_OnTrigger_Patch
+        static class ruleSpellResistanceCheck_OnTrigger_Patch
         {
             internal static void Postfix(RuleSpellResistanceCheck __instance, RulebookEventContext context)
             {
-                EventBus.RaiseEvent<IRuleSpellResistanceTriggered>((Action<IRuleSpellResistanceTriggered>)(h => h.ruleSavingThrowTriggered(__instance)));
+                Main.logger.Log("Made it to spell resistance check");
+                EventBus.RaiseEvent<IRuleSpellResistanceTriggered>((Action<IRuleSpellResistanceTriggered>)(h => h.ruleSpellResistanceCheckTriggered(__instance)));
 
                 if (__instance.Initiator.Descriptor.State.IsDead)
                     return;
 
+                var contextRelevant = __instance.Context;
 
-                var context2 = __instance.Reason?.Context;
-                //var ability = __instance.Reason?.;
-
-                if (context2 == null)
-                {
+                if (contextRelevant == null)
                     return;
-                }
 
-                if (!context2.HasMetamagic((Metamagic)FurtherMetamagicExtension.RelentlessCasting))
+                if (!contextRelevant.HasMetamagic((Metamagic)FurtherMetamagicExtension.RelentlessCasting))
                 {
                     return;
                 }
@@ -59,7 +56,7 @@ namespace PsychicClassMod
                     int old_value = __instance.Roll;
                     Harmony12.Traverse.Create(__instance).Property("Roll").SetValue(RulebookEvent.Dice.D20);
                     int new_value = __instance.Roll;
-                    Common.AddBattleLogMessage(__instance.Initiator.CharacterName + " rerolls saving throw due to persistent spell: " + $"{old_value}  >>  {new_value}");
+                    Common.AddBattleLogMessage(__instance.Initiator.CharacterName + " rerolls saving throw due to relentless casting: " + $"{old_value}  >>  {new_value}");
                 }
             }
         }

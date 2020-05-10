@@ -11,6 +11,7 @@ using Kingmaker.UnitLogic;
 using Kingmaker.UnitLogic.Commands.Base;
 using Kingmaker.UnitLogic.ActivatableAbilities;
 using Kingmaker.UnitLogic.Abilities;
+using Kingmaker.Designers.Mechanics.Facts;
 
 namespace PsychicClassMod
 {
@@ -39,13 +40,15 @@ namespace PsychicClassMod
                                           "",
                                           Helpers.GetIcon("ee7dc126939e4d9438357fbd5980d459"), //guid for spell penetration feat/feature
                                           null,
-                                            Helpers.Create<CallOfTheWild.NewMechanics.MetamagicMechanics.MetamagicOnSpellDescriptor>(m =>
-                                            {
-                                                m.amount = 1;
-                                                m.resource = resource;
-                                                m.Metamagic = (Metamagic)MetamagicExpansion.FurtherMetamagicExtension.RelentlessCasting;
-                                                m.spellbook = spellbook;
-                                            })
+                                          Helpers.Create<CallOfTheWild.NewMechanics.SpendResourceOnSpellCast>(s => { s.spellbook = spellbook; s.resource = resource; }),
+                                          Helpers.Create<AutoMetamagic>(a => { a.Metamagic = (Metamagic)MetamagicExpansion.FurtherMetamagicExtension.RelentlessCasting;})
+                                          //Helpers.Create<CallOfTheWild.NewMechanics.MetamagicMechanics.MetamagicOnSpellDescriptor>(m =>
+                                          //{
+                                          //    m.amount = 1;
+                                          //    m.resource = resource;
+                                          //    m.Metamagic = (Metamagic)MetamagicExpansion.FurtherMetamagicExtension.RelentlessCasting;
+                                          //    m.spellbook = spellbook;
+                                          //})
                                           );
 
             var toggle = Common.buffToToggle(buff, UnitCommand.CommandType.Free, true,
