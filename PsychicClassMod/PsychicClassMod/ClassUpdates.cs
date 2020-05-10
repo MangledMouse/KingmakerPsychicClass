@@ -43,13 +43,13 @@ namespace PsychicClassMod
             BlueprintFeature relentlessCasting = engine.createRelentlessCasting();
 
             BlueprintFeatureSelection phrenicDabbler = library.Get<BlueprintFeatureSelection>("f5ab5bf71394419a87072445c46d3e79");
-            phrenicDabbler.AllFeatures.AddToArray<BlueprintFeature>(relentlessCasting);
+            phrenicDabbler.AllFeatures = phrenicDabbler.AllFeatures.AddToArray<BlueprintFeature>(relentlessCasting);
 
-            Main.logger.Log("All the features of Phrenic Dabbler");
-            foreach(BlueprintFeatureSelection bfs in phrenicDabbler.AllFeatures)
-            {
-                //Main.logger.Log("")
-            }
+            //Main.logger.Log("All the features of Phrenic Dabbler");
+            //foreach(BlueprintFeatureSelection bfs in phrenicDabbler.AllFeatures)
+            //{
+            //    Main.logger.Log("")
+            //}
 
             //BlueprintFeature focused_force = engine.createFocusedForce();
             //BlueprintFeature biokinetic_healing = engine.createBiokineticHealing();
