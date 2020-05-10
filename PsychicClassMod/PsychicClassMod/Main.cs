@@ -71,25 +71,28 @@ namespace PsychicClassMod
             return true;
         }
 
-        [Harmony12.HarmonyPatch(typeof(LibraryScriptableObject), "LoadDictionary")]
-        [Harmony12.HarmonyPatch(typeof(LibraryScriptableObject), "LoadDictionary", new Type[0])]
-        static class LibraryScriptableObject_LoadDictionary_Patch
-        {
-            static void Postfix(LibraryScriptableObject __instance)
-            {
-                var self = __instance;
-                if (Main.library != null) return;
-                Main.library = self;
-            } 
-        }
+        //[Harmony12.HarmonyPatch(typeof(LibraryScriptableObject), "LoadDictionary")]
+        //[Harmony12.HarmonyPatch(typeof(LibraryScriptableObject), "LoadDictionary", new Type[0])]
+        //static class LibraryScriptableObject_LoadDictionary_Patch
+        //{
+        //    static void Postfix(LibraryScriptableObject __instance)
+        //    {
+        //        var self = __instance;
+        //        if (Main.library != null) return;
+        //        Main.library = self;
+        //    } 
+        //}
 
         [Harmony12.HarmonyPatch(typeof(LibraryScriptableObject), "LoadDictionary")]
         [Harmony12.HarmonyPatch(typeof(LibraryScriptableObject), "LoadDictionary", new Type[0])]
         [Harmony12.HarmonyAfter("CallOfTheWild")] //These want to launch after Call of the Wild so that Call's stuff exists and can be editted
         static class LibraryScriptableObject_LoadDictionary_Patch_After
         {
-            static void Postfix()
+            static void Postfix(LibraryScriptableObject __instance)
             {
+                var self = __instance;
+                if (Main.library != null) return;
+                Main.library = self;
                 try
                 {
                     Main.DebugLog("Loading PsychicClassMod after Call of the Wild");
