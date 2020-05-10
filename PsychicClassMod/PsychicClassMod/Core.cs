@@ -32,11 +32,6 @@ namespace PsychicClassMod
 {
     class Core
     {
-        static internal void preLoad()
-        {
-            //for anything that should load before new spells, this is just copied out of custom spells and I don't expect to do anything with it here
-        }
-
         static internal void postLoad()
         {
             ClassUpdates.load();

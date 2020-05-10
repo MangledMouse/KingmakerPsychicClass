@@ -71,51 +71,17 @@ namespace PsychicClassMod
             return true;
         }
 
-        //static class LibraryScriptableObject_LoadDictionary_Patch
-        //{
-        //    static bool Run = false;
-        //    static void Postfix()
-        //    {
-        //        if (Run) return; Run = true;
-        //        try
-        //        {
-        //            Main.DebugLog("Loading PsychicClassMod");
-        //            
-        //        }
-        //        catch(Exception ex)
-        //        {
-        //            Main.DebugError(ex);
-        //        }
-        //    }
-        //}
-
-        [Harmony12.HarmonyPatch(typeof(CallOfTheWild.NewSpells), "load")]
-        static class LibraryScriptableObject_LoadDictionary_Patch_Before
+        [Harmony12.HarmonyPatch(typeof(LibraryScriptableObject), "LoadDictionary")]
+        [Harmony12.HarmonyPatch(typeof(LibraryScriptableObject), "LoadDictionary", new Type[0])]
+        static class LibraryScriptableObject_LoadDictionary_Patch
         {
-            static bool Run = false;
-            static void Postfix()
+            static void Postfix(LibraryScriptableObject __instance)
             {
-                if (Run) return; Run = true;
-                Main.library = CallOfTheWild.NewSpells.library;
-                try
-                {
-//#if DEBUG
-//                    bool allow_guid_generation = true;
-//#else
-//                    bool allow_guid_generation = false; //no guids should be ever generated in release
-//#endif
-//                    CallOfTheWild.Helpers.GuidStorage.load(Properties.Resources.blueprints, allow_guid_generation);
-                    Main.DebugLog("Loading PsychicClassMod");
-                    logger.Log("Made it to pre load");
-                    Core.preLoad();
-                }
-                catch (Exception ex)
-                {
-                    Main.DebugError(ex);
-                }
-            }
+                var self = __instance;
+                if (Main.library != null) return;
+                Main.library = self;
+            } 
         }
-
 
         [Harmony12.HarmonyPatch(typeof(LibraryScriptableObject), "LoadDictionary")]
         [Harmony12.HarmonyPatch(typeof(LibraryScriptableObject), "LoadDictionary", new Type[0])]
@@ -135,10 +101,8 @@ namespace PsychicClassMod
                     bool allow_guid_generation = false; //no guids should be ever generated in release
 #endif
                     CallOfTheWild.Helpers.GuidStorage.load(Properties.Resources.blueprints, allow_guid_generation);
-
-                    //logger.Log("Made it to post load");
-                    Main.logger.Log("Made it to post fix for after call");
                     Core.postLoad();
+                    //logger.Log("Made it to post load");
 
 
 #if DEBUG

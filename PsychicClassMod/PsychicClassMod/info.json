@@ -4,7 +4,7 @@
   "Author": "CowWithHat",
   "Version": "1.0.0",
   "ManagerVersion": "0.13.0",
-  "Requirements": [ "CallOfTheWild",  "CowWithHatsCustomSpellsMod" ],
+  "Requirements": [ "CallOfTheWild", "CowWithHatsCustomSpellsMod" ],
   "AssemblyName": "PsychicClassMod.dll",
   "HomePage": "",
   "EntryMethod": "PsychicClassMod.Main.Load"

@@ -14,13 +14,13 @@ using Kingmaker.UnitLogic.Abilities;
 
 namespace PsychicClassMod
 {
-    public class PhrenicAmplificationsContinuation : PhrenicAmplificationsEngine
+    public class PhrenicAmplificationContinuations : PhrenicAmplificationsEngine
     {
         BlueprintAbilityResource resource;
         BlueprintSpellbook spellbook;
         BlueprintCharacterClass character_class;
         string name_prefix;
-        public PhrenicAmplificationsContinuation(BlueprintAbilityResource pool_resource, BlueprintSpellbook linked_spellbook, BlueprintCharacterClass linked_class, string asset_prefix) : base(pool_resource, linked_spellbook, linked_class, asset_prefix)
+        public PhrenicAmplificationContinuations(BlueprintAbilityResource pool_resource, BlueprintSpellbook linked_spellbook, BlueprintCharacterClass linked_class, string asset_prefix) : base(pool_resource, linked_spellbook, linked_class, asset_prefix)
         {
             resource = pool_resource;
             spellbook = linked_spellbook;
@@ -33,10 +33,10 @@ namespace PsychicClassMod
         //public static 
         public BlueprintFeature createRelentlessCasting()
         {
-            var buff = Helpers.CreateBuff(name_prefix + "RelentlessCastingBuff",
+            var buff = Helpers.CreateBuff(name_prefix + "TheBuffForRelentlessCasting",
                                           "Relentless Casting",
                                           "When casting a spell the psychic may spend 1 point from her phrenic pool to roll twice and any checks to overcome spell penetration checks required for the linked spell and take the better result.",
-                                          "a8fef5d2b95d40af9ae1371c503bd555", //fresh random one
+                                          "",
                                           Helpers.GetIcon("ee7dc126939e4d9438357fbd5980d459"), //guid for spell penetration feat/feature
                                           null,
                                             Helpers.Create<CallOfTheWild.NewMechanics.MetamagicMechanics.MetamagicOnSpellDescriptor>(m =>
