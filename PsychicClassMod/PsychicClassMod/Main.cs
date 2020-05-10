@@ -94,7 +94,7 @@ namespace PsychicClassMod
                 {
                     Main.DebugLog("Loading PsychicClassMod after Call of the Wild");
 
-                    CallOfTheWild.LoadIcons.Image2Sprite.icons_folder = @"./Mods/PsychicClassMod/Icons/";
+                    //CallOfTheWild.LoadIcons.Image2Sprite.icons_folder = @"./Mods/PsychicClassMod/Icons/";
 #if DEBUG                
                     bool allow_guid_generation = true;
 #else

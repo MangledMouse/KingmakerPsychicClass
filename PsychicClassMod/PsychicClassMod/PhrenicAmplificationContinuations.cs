@@ -33,9 +33,9 @@ namespace PsychicClassMod
         //public static 
         public BlueprintFeature createRelentlessCasting()
         {
-            var buff = Helpers.CreateBuff(name_prefix + "TheBuffForRelentlessCasting",
+            var buff = Helpers.CreateBuff(name_prefix + "RelentlessCastingBuff",
                                           "Relentless Casting",
-                                          "When casting a spell the psychic may spend 1 point from her phrenic pool to roll twice and any checks to overcome spell penetration checks required for the linked spell and take the better result.",
+                                          "When casting a spell the psychic may spend 1 point from her phrenic pool to roll twice on any checks to overcome spell penetration that would be required for the linked spell taking the better result.",
                                           "",
                                           Helpers.GetIcon("ee7dc126939e4d9438357fbd5980d459"), //guid for spell penetration feat/feature
                                           null,
