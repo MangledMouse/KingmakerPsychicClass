@@ -13,6 +13,7 @@ using Kingmaker.Blueprints.Classes.Spells;
 using Kingmaker.EntitySystem.Stats;
 using Kingmaker.Blueprints.Classes.Prerequisites;
 using Kingmaker.UnitLogic.Abilities.Blueprints;
+using Kingmaker.Designers.Mechanics.Facts;
 
 namespace PsychicClassMod
 {
@@ -24,6 +25,7 @@ namespace PsychicClassMod
         static public BlueprintFeature psychic_proficiencies;
         static public BlueprintFeature psychic_knacks;
         static public BlueprintSpellbook psychic_spellbook;
+        static public BlueprintParametrizedFeature psychic_extra_spells_feature;
         
         static public BlueprintFeatureSelection phrenic_amplifications_feature;
         static public BlueprintAbilityResource phrenic_pool_resource;
@@ -80,13 +82,54 @@ namespace PsychicClassMod
             psychic_class.StartingItems = sorcerer_class.StartingItems;
 
             psychic_class.AddComponent(Helpers.Create<PrerequisiteNoClassLevel>(p => p.CharacterClass = animal_class));
-            
+
+            createPsychicExtraSpellsFeatures();
             createPsychicProgression();
             
             psychic_class.Progression = psychic_progression;
             Helpers.RegisterClass(psychic_class);
         }
 
+        private static void createPsychicExtraSpellsFeatures()
+        {
+            psychic_extra_spells_feature = library.CopyAndAdd<BlueprintParametrizedFeature>("4a2e8388c2f0dd3478811d9c947bebfb", "PsychicBonusSpellsFeature", "");//NewArcana feature
+            LearnSpellParametrized learn_spell = psychic_extra_spells_feature.GetComponent<LearnSpellParametrized>();
+            psychic_extra_spells_feature.SetComponents(new BlueprintComponent[] { learn_spell});
+            psychic_extra_spells_feature.SetDescription("At 2nd level, you can add any one spell from the psychic spell list to your list of spells known. This spell must be of a level that you are capable of casting. You can also add one additional spell at 9th level and 17th level.");
+            psychic_extra_spells_feature.SpellcasterClass = psychic_class;
+            psychic_extra_spells_feature.SpellList = psychic_spellbook.SpellList;
+            psychic_extra_spells_feature.Groups = new FeatureGroup[] { FeatureGroup.None };
+            learn_spell.SpellcasterClass = psychic_class;
+            learn_spell.SpellList = psychic_spellbook.SpellList;
+
+            //LearnSpellParametrized learn_spell = Helpers.CreateLearnSpell(psychic_spellbook.SpellList, psychic_class);
+            //learn_spell.SpecificSpellLevel = false;
+            //psychic_extra_spells_feature = Helpers.CreateParametrizedFeature("PsychicExtraSpellsFeature",
+            //    "Bonus Psychic Spell",
+            //    "At 2nd level, you can add any one spell from the psychic spell list to your list of spells known. This spell must be of a level that you are capable of casting. You can also add one additional spell at 9th level and 17th level.",
+            //    "",
+            //    null,
+            //    FeatureGroup.None,
+            //    FeatureParameterType.LearnSpell,
+            //    learn_spell
+            //    );
+            //Main.logger.Log("The base blueprints for parameterized ExtraSpellsFeature");
+            //List<BlueprintAbility> psychicSpells = new List<BlueprintAbility>();
+            //foreach(SpellLevelList spellLevelList in psychic_spellbook.SpellList.SpellsByLevel)
+            //{
+            //    foreach (BlueprintAbility spell in spellLevelList.Spells)
+            //        psychicSpells.Add(spell);
+            //}
+            //psychic_extra_spells_feature.BlueprintParameterVariants = psychicSpells.ToArray();
+            //psychic_extra_spells_feature.DisallowSpellsInSpellList = false;
+            //psychic_extra_spells_feature.SpellLevel = 0;
+            //psychic_extra_spells_feature.SpecificSpellLevel = false;
+            //psychic_extra_spells_feature.SpellcasterClass = psychic_class;
+            //psychic_extra_spells_feature.SpellList = psychic_spellbook.SpellList;
+            //psychic_extra_spells_feature.SpellLevelPenalty = 0;
+            //psychic_extra_spells_feature.
+            //[PsychicClassMod] Learn spell components specific spell level? False spell level 0 caster class Sorcerer spell level 0 Spell level penalty 0 spell list WizardSpellList
+        }
 
         private static void createPsychicProgression()
         {
@@ -136,6 +179,13 @@ namespace PsychicClassMod
                 else
                     entries.Add(Helpers.LevelEntry(i));
             }
+            psychic_progression.UIGroups = psychic_progression.UIGroups.AddToArray<UIGroup>(Helpers.CreateUIGroup(psychic_extra_spells_feature));
+            entries.Add(Helpers.LevelEntry(2, psychic_extra_spells_feature));
+            psychic_progression.UIGroups[0].Features.Add(psychic_extra_spells_feature);
+            entries.Add(Helpers.LevelEntry(9, psychic_extra_spells_feature));
+            psychic_progression.UIGroups[0].Features.Add(psychic_extra_spells_feature);
+            entries.Add(Helpers.LevelEntry(17, psychic_extra_spells_feature));
+            psychic_progression.UIGroups[0].Features.Add(psychic_extra_spells_feature);
             //see the createWitchProgression function to see what to do next for phrenic amps
             //this is also probably where phrenic disciplines should live and that should use oracle mysteries as a base
             //will also want to make a feature like the NewArcana feature from bloodline arcana
@@ -143,6 +193,29 @@ namespace PsychicClassMod
             //BloodlineArcaneNewArcanaFeature	4a2e8388c2f0dd3478811d9c947bebfb	Kingmaker.Blueprints.Classes.Selection.BlueprintParametrizedFeature
             psychic_progression.UIDeterminatorsGroup = new BlueprintFeatureBase[] { psychic_proficiencies, psychic_knacks, detect_magic };
             psychic_progression.LevelEntries = entries.ToArray();
+            BlueprintParametrizedFeature newArcana = library.Get<BlueprintParametrizedFeature>("4a2e8388c2f0dd3478811d9c947bebfb");
+            //Main.logger.Log($"New Arcana parametrized feature variable values. Number of parameter variables {newArcana.BlueprintParameterVariants.Length}. Disallow spells in spell list {newArcana.DisallowSpellsInSpellList}. Spell level {newArcana.SpellLevel}. CustomParameterVariants count {newArcana.CustomParameterVariants.Length}. SpecificSpellLevel {newArcana.SpecificSpellLevel}. SpellCasterClass {newArcana.SpellcasterClass.LocalizedName}. Spell list name {newArcana.SpellList.name}. Spell level penalty {newArcana.SpellLevelPenalty}.");
+            //foreach (BlueprintScriptableObject bso in newArcana.BlueprintParameterVariants)
+            //    Main.logger.Log($" parameter variant {bso.name} of type {bso.GetType().ToString()}");
+            //foreach (BlueprintComponent bc in newArcana.GetComponents<BlueprintComponent>())
+            //{
+            //    Main.logger.Log($"New Arcana component {bc.name} with type {bc.GetType().ToString()}");
+            //    LearnSpellParametrized lsp = bc as LearnSpellParametrized;
+            //    if(lsp!=null)
+            //    {
+            //        Main.logger.Log($"Learn spell components specific spell level? {lsp.SpecificSpellLevel.ToString()} spell level {lsp.SpellLevel} caster class {lsp.SpellcasterClass.LocalizedName} spell level {lsp.SpellLevel} Spell level penalty {lsp.SpellLevelPenalty} spell list {lsp.SpellList.ToString()}");
+            //    }
+            //    PrerequisiteNoArchetype pna = bc as PrerequisiteNoArchetype;
+            //    if (pna != null)
+            //        Main.logger.Log($"The disallowed archetype is {pna.Archetype.LocalizedName} of class {pna.CharacterClass.LocalizedName}");
+            //}
+            //BlueprintFeature extraSpells = psychic_extra_spells_feature;
+            //foreach(BlueprintComponent bc in psychic_extra_spells_feature.GetComponents<BlueprintComponent>())
+            //{
+            //    LearnSpellParametrized lsp = bc as LearnSpellParametrized;
+            //    if(lsp!=null)
+            //        Main.logger.Log($"Learn spell components specific spell level? {lsp.SpecificSpellLevel.ToString()} spell level {lsp.SpellLevel} caster class {lsp.SpellcasterClass.LocalizedName} spell level {lsp.SpellLevel} Spell level penalty {lsp.SpellLevelPenalty} spell list {lsp.SpellList.ToString()}");
+            //}
             
         }
 
