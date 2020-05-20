@@ -2,7 +2,7 @@
   "Id": "PsychicClassMod",
   "DisplayName": "PsychicClassMod",
   "Author": "CowWithHat",
-  "Version": "1.0.0",
+  "Version": "1.0.0b",
   "ManagerVersion": "0.13.0",
   "Requirements": [ "CallOfTheWild", "CowWithHatsCustomSpellsMod" ],
   "AssemblyName": "PsychicClassMod.dll",

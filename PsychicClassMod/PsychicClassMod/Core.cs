@@ -35,6 +35,13 @@ namespace PsychicClassMod
         static internal void postLoad()
         {
             ClassUpdates.load();
+            PsychicClass.createPsychicClass();
+            outputInfoToLog();
+        }
+
+        static internal void outputInfoToLog()
+        {
+            
         }
     }
 }

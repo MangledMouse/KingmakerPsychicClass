@@ -127,6 +127,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="PsychicClass.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="blueprints.txt">

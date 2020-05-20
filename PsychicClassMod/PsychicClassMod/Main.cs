@@ -85,7 +85,7 @@ namespace PsychicClassMod
 
         [Harmony12.HarmonyPatch(typeof(LibraryScriptableObject), "LoadDictionary")]
         [Harmony12.HarmonyPatch(typeof(LibraryScriptableObject), "LoadDictionary", new Type[0])]
-        [Harmony12.HarmonyAfter("CallOfTheWild")] //These want to launch after Call of the Wild so that Call's stuff exists and can be editted
+        [Harmony12.HarmonyAfter("CowWithHatsCustomSpellsMod")] //These want to launch after custom spells, which in turn comes after CotW so that all elements from both exist to be editted and used
         static class LibraryScriptableObject_LoadDictionary_Patch_After
         {
             static void Postfix(LibraryScriptableObject __instance)

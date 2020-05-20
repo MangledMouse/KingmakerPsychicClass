@@ -35,7 +35,7 @@ namespace PsychicClassMod
         {
             internal static void Postfix(RuleSpellResistanceCheck __instance, RulebookEventContext context)
             {
-                Main.logger.Log("Made it to spell resistance check");
+                //Main.logger.Log("Made it to spell resistance check");
                 EventBus.RaiseEvent<IRuleSpellResistanceTriggered>((Action<IRuleSpellResistanceTriggered>)(h => h.ruleSpellResistanceCheckTriggered(__instance)));
 
                 if (__instance.Initiator.Descriptor.State.IsDead)
