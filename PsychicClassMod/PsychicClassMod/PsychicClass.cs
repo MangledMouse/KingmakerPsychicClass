@@ -23,6 +23,23 @@ namespace PsychicClassMod
         static public BlueprintProgression psychic_progression;
         static public BlueprintFeature psychic_proficiencies;
         static public BlueprintFeature psychic_knacks;
+        static public BlueprintSpellbook psychic_spellbook;
+        
+        static public BlueprintFeatureSelection phrenic_amplifications_feature;
+        static public BlueprintAbilityResource phrenic_pool_resource;
+        static public BlueprintFeature phrenic_pool_display_feature;
+
+        //theAmplifications
+        static public BlueprintFeature focused_force;
+        static public BlueprintFeature ongoing_defense;
+        static public BlueprintFeature biokinetic_healing;
+        static public BlueprintFeature conjured_armor;
+        static public BlueprintFeature defensive_prognostication;
+        static public BlueprintFeature minds_eye;
+        static public BlueprintFeature overpowering_mind;
+        static public BlueprintFeature will_of_the_dead;
+        static public BlueprintFeature relentless_casting;
+
         public static bool test_mode = false;
         
         internal static void createPsychicClass()
@@ -65,16 +82,17 @@ namespace PsychicClassMod
             psychic_class.AddComponent(Helpers.Create<PrerequisiteNoClassLevel>(p => p.CharacterClass = animal_class));
             
             createPsychicProgression();
+            
             psychic_class.Progression = psychic_progression;
             Helpers.RegisterClass(psychic_class);
         }
+
 
         private static void createPsychicProgression()
         {
 
             //createPsychicDisciplines
             createKnacks();
-            //createPhrenicAmps
             
             psychic_progression = Helpers.CreateProgression("PsychicProgression",
                                        psychic_class.Name,
@@ -93,16 +111,31 @@ namespace PsychicClassMod
             psychic_proficiencies.SetDescription("Psychics are proficient with all simple weapons. They are not proficient with any type of armor or shield. Unlike Arcane casters, Psychics trained in their use suffer no spell failure chance from using armor");
 
             var detect_magic = library.Get<BlueprintFeature>("ee0b69e90bac14446a4cf9a050f87f2e");
+            createPhrenicAmplificationsFeatures();
 
             //level entries of features like phrenic discipline and such
             var entries = new List<LevelEntry>();
-            entries.Add(Helpers.LevelEntry(1, psychic_proficiencies, psychic_knacks, detect_magic,
+            entries.Add(Helpers.LevelEntry(1, psychic_proficiencies, 
+                psychic_knacks, 
+                detect_magic, 
+                phrenic_pool_display_feature, 
+                phrenic_amplifications_feature,
                 library.Get<BlueprintFeature>("d3e6275cfa6e7a04b9213b7b292a011c"), // ray calculate feature
                 library.Get<BlueprintFeature>("62ef1cdb90f1d654d996556669caf7fa"),  // touch calculate feature
                 library.Get<BlueprintFeature>("9fc9813f569e2e5448ddc435abf774b3") //full caster feature
                 ));
 
-
+            psychic_progression.UIGroups = new UIGroup[1] { Helpers.CreateUIGroup(phrenic_amplifications_feature) };
+            for(int i=3; i<=20; i++)
+            {
+                if ((i - 3) % 4 == 0)
+                {
+                    entries.Add(Helpers.LevelEntry(i, phrenic_amplifications_feature));
+                    psychic_progression.UIGroups[0].Features.Add(phrenic_amplifications_feature);
+                }
+                else
+                    entries.Add(Helpers.LevelEntry(i));
+            }
             //see the createWitchProgression function to see what to do next for phrenic amps
             //this is also probably where phrenic disciplines should live and that should use oracle mysteries as a base
             //will also want to make a feature like the NewArcana feature from bloodline arcana
@@ -110,6 +143,65 @@ namespace PsychicClassMod
             //BloodlineArcaneNewArcanaFeature	4a2e8388c2f0dd3478811d9c947bebfb	Kingmaker.Blueprints.Classes.Selection.BlueprintParametrizedFeature
             psychic_progression.UIDeterminatorsGroup = new BlueprintFeatureBase[] { psychic_proficiencies, psychic_knacks, detect_magic };
             psychic_progression.LevelEntries = entries.ToArray();
+            
+        }
+
+        private static void createPhrenicAmplificationsFeatures()
+        {
+            phrenic_pool_resource = Helpers.CreateAbilityResource("PsychicPhrenicPoolResource", "Phrenic Pool","", "", 
+                null);
+            phrenic_pool_display_feature = Helpers.CreateFeature("PsychicPhrenicPoolResourceDisplayFeature",
+                "Phrenic Pool",
+                "A psychic has a pool of supernatural mental energy that she can draw upon to manipulate psychic spells as she casts them. The maximum number of points in a psychic’s phrenic pool is equal to 1/2 her psychic level + her Wisdom or Charisma modifier, as determined by her psychic discipline. The phrenic pool is replenished each morning after 8 hours of rest or meditation. The psychic might be able to recharge points in her phrenic pool in additional circumstances dictated by her psychic discipline. Points gained in excess of the pool’s maximum are lost.",
+                "",
+                null,
+                FeatureGroup.None);
+            //to adjust the StatType to appropriately use the one that matches the Psychics phrenic discipline
+            //will have to call these lines
+            //var amount = getMaxAmount(phrenic_pool_resource);
+            //Helpers.SetField(amount, "ResourceBonusStat", StatType.Wisdom);//it starts as charisma so we won't have to do anything for those
+            //setMaxAmount(phrenic_pool_resource, amount);
+            //phrenic_pool_resource.SetIncreasedByLevelStartPlusDivStep(0, 2, 1, 2, 1, 0, 0.0f, getPsychicArray());
+            phrenic_pool_resource.SetIncreasedByLevelStartPlusDivStepAndStatBonus(0, 2, 1, 2, 1, 0, 0.0f, getPsychicArray(), StatType.Charisma);
+
+            phrenic_amplifications_feature = Helpers.CreateFeatureSelection("PsychicPhrenicAmplificationsFeature",
+                "Phrenic Amplifications",
+                "A psychic develops particular techniques to empower her spellcasting, called phrenic amplifications. The psychic can activate a phrenic amplification only while casting a spell using psychic magic, and the amplification modifies either the spell’s effects or the process of casting it. The spell being cast is called the linked spell. The psychic can activate only one amplification each time she casts a spell, and doing so is part of the action used to cast the spell. She can use any amplification she knows with any psychic spell, unless the amplification’s description states that it can be linked only to certain types of spells. A psychic learns one phrenic amplification at 1st level. At 3rd level and every 4 levels thereafter, the psychic learns a new phrenic amplification. A phrenic amplification can’t be selected more than once. Once a phrenic amplification has been selected, it can’t be changed. Phrenic amplifications require the psychic to expend 1 or more points from her phrenic pool to function.",
+                "",
+                null,
+                FeatureGroup.None,
+                Helpers.CreateAddAbilityResource(phrenic_pool_resource)
+                );
+
+            var phrenic_amplifications_engine = new PhrenicAmplificationContinuations(phrenic_pool_resource, psychic_spellbook, psychic_class, "Psychic");
+            
+            biokinetic_healing = phrenic_amplifications_engine.createBiokineticHealing();
+            conjured_armor = phrenic_amplifications_engine.createConjuredArmor();
+            defensive_prognostication = phrenic_amplifications_engine.createDefensivePrognostication();
+            focused_force = phrenic_amplifications_engine.createFocusedForce();
+            minds_eye = phrenic_amplifications_engine.createMindsEye();
+            ongoing_defense = phrenic_amplifications_engine.createOngoingDefense();
+            overpowering_mind = phrenic_amplifications_engine.createOverpoweringMind();
+            relentless_casting = phrenic_amplifications_engine.createRelentlessCasting();
+            will_of_the_dead = phrenic_amplifications_engine.createWillOfTheDead();
+
+            phrenic_amplifications_feature.AllFeatures = new BlueprintFeature[]
+                {
+                     biokinetic_healing,
+                conjured_armor,
+                defensive_prognostication,
+                focused_force,
+                minds_eye,
+                overpowering_mind,
+                will_of_the_dead,
+                ongoing_defense,
+                relentless_casting
+                };
+
+
+            //Investigator.phrenic_dabbler.AllFeatures;
+
+
         }
 
         private static BlueprintCharacterClass[] getPsychicArray()
@@ -132,7 +224,7 @@ namespace PsychicClassMod
 
         private static BlueprintSpellbook createPsychicSpellbook(BlueprintCharacterClass sorcererForReference, BlueprintArchetype psychicDetectiveForReference)
         {
-            var psychic_spellbook = Helpers.Create<BlueprintSpellbook>();
+            psychic_spellbook = Helpers.Create<BlueprintSpellbook>();
             psychic_spellbook.name = "PsychicSpellbook";
             library.AddAsset(psychic_spellbook, "0dad06ad889d49c297056834980d6ee4");//fresh guid
             psychic_spellbook.Name = psychic_class.LocalizedName;
@@ -170,12 +262,12 @@ namespace PsychicClassMod
             {
                 foreach (BlueprintAbility spell in spellLevelList.Spells)
                 {
-                    //this pulls every spell from the Psychic Detective list and adds them except for the
-                    //two early access spells find traps and banishment
-                    
+                    //this pulls every spell from the Psychic Detective list and adds them 
+                    //except for the two early access spells namely find traps and banishment
+
                     if (spell.AssetGuid != "4709274b2080b6444a3c11c6ebbe2404" && spell.AssetGuid != "d361391f645db984bbf58907711a146a")
                     {
-                        Main.logger.Log($"Spell to add {spell.Name} with type {spell.GetType().ToString()}");
+                        //Main.logger.Log($"Spell to add {spell.Name} with type {spell.GetType().ToString()}");
                         spell.AddToSpellList(psychic_spellbook.SpellList, spellLevelList.SpellLevel);
                     }
                 }

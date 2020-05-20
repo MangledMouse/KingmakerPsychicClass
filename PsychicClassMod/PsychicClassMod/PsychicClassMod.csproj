@@ -116,6 +116,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdditionalHelpers.cs" />
     <Compile Include="ClassUpdates.cs" />
     <Compile Include="Core.cs" />
     <Compile Include="Main.cs" />
