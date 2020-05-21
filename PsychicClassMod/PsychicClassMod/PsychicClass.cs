@@ -14,6 +14,7 @@ using Kingmaker.EntitySystem.Stats;
 using Kingmaker.Blueprints.Classes.Prerequisites;
 using Kingmaker.UnitLogic.Abilities.Blueprints;
 using Kingmaker.Designers.Mechanics.Facts;
+using Kingmaker.UnitLogic.FactLogic;
 
 namespace PsychicClassMod
 {
@@ -42,6 +43,10 @@ namespace PsychicClassMod
         static public BlueprintFeature overpowering_mind;
         static public BlueprintFeature will_of_the_dead;
         static public BlueprintFeature relentless_casting;
+
+        //Feats
+        static public BlueprintFeature extra_amplification_feat;
+        static public BlueprintFeature extra_phrenic_pool_feat;
 
         public static bool test_mode = false;
         
@@ -89,6 +94,37 @@ namespace PsychicClassMod
             
             psychic_class.Progression = psychic_progression;
             Helpers.RegisterClass(psychic_class);
+            createPsychicFeats();
+        }
+
+        private static void createPsychicFeats()
+        {
+            var extra_amplification_selection = Helpers.CreateFeatureSelection("ExtraAmplificationFeat",
+                "Extra Phrenic Amplification (Psychic)",
+                "You gain one additional phrenic amplification.\n" +
+                "Special: you can take this feat multiple times. Each time you do gain another amplfication.",
+                "",
+                null,
+                FeatureGroup.Feat,
+                phrenic_amplifications_feature.PrerequisiteFeature()
+                ) ;
+            extra_amplification_selection.AllFeatures = phrenic_amplifications_feature.AllFeatures;
+            //extra_amplification_selection.Features = phrenic_amplifications_feature.Features;
+            extra_amplification_feat = extra_amplification_selection;
+            extra_amplification_feat.Ranks = 10;
+            extra_amplification_feat.Groups = new FeatureGroup[] { FeatureGroup.Feat };
+
+            var extra_phrenic_pool_feat = Helpers.CreateFeature("ExpandedPhrenicPoolFeat",
+                "Expanded Phrenic Pool",
+                "Your phrenic pool total increases by 2 points.",
+                "",
+                Helpers.GetIcon("42f96fc8d6c80784194262e51b0a1d25"), //extra arcana as used by psychic detective's feature version of this feat
+                FeatureGroup.Feat,
+                phrenic_pool_display_feature.PrerequisiteFeature(),
+                Helpers.Create<IncreaseResourceAmount>(i => { i.Resource = phrenic_pool_resource; i.Value = 2; })
+                ) ;
+
+            library.AddFeats(extra_amplification_feat, extra_phrenic_pool_feat);
         }
 
         private static void createPsychicExtraSpellsFeatures()
