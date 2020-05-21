@@ -93,14 +93,21 @@ namespace PsychicClassMod
         private static void createPsychicExtraSpellsFeatures()
         {
             psychic_extra_spells_feature = library.CopyAndAdd<BlueprintParametrizedFeature>("4a2e8388c2f0dd3478811d9c947bebfb", "PsychicBonusSpellsFeature", "");//NewArcana feature
-            LearnSpellParametrized learn_spell = psychic_extra_spells_feature.GetComponent<LearnSpellParametrized>();
+            LearnSpellParametrized learn_spell = psychic_extra_spells_feature.GetComponent<LearnSpellParametrized>().CreateCopy<LearnSpellParametrized>();
             psychic_extra_spells_feature.SetComponents(new BlueprintComponent[] { learn_spell});
-            psychic_extra_spells_feature.SetDescription("At 2nd level, you can add any one spell from the psychic spell list to your list of spells known. This spell must be of a level that you are capable of casting. You can also add one additional spell at 9th level and 17th level.");
+            psychic_extra_spells_feature.SetDescription("At 2nd level, a psychic adds any one spell from the psychic spell list to her list of spells known. This spell must be of a level that she is capable of casting. She can also add one additional spell at 9th level and 17th level.");
+            psychic_extra_spells_feature.SetName("Psychic Bonus Spell");
             psychic_extra_spells_feature.SpellcasterClass = psychic_class;
             psychic_extra_spells_feature.SpellList = psychic_spellbook.SpellList;
             psychic_extra_spells_feature.Groups = new FeatureGroup[] { FeatureGroup.None };
             learn_spell.SpellcasterClass = psychic_class;
             learn_spell.SpellList = psychic_spellbook.SpellList;
+            if(psychic_extra_spells_feature.Prerequisite !=null)
+                Main.logger.Log($"Prerequisite {psychic_extra_spells_feature.Prerequisite.name} and type {psychic_extra_spells_feature.GetType().ToString()}");
+            if(psychic_extra_spells_feature.Items != null)
+                Main.logger.Log($"number of items {psychic_extra_spells_feature.Items.Count()}");
+            BlueprintParametrizedFeature newArcana = library.Get<BlueprintParametrizedFeature>("4a2e8388c2f0dd3478811d9c947bebfb");
+            Main.logger.Log($"New Arcana feature is a class feature? {newArcana.IsClassFeature}");
 
             //LearnSpellParametrized learn_spell = Helpers.CreateLearnSpell(psychic_spellbook.SpellList, psychic_class);
             //learn_spell.SpecificSpellLevel = false;
@@ -194,7 +201,7 @@ namespace PsychicClassMod
             psychic_progression.UIDeterminatorsGroup = new BlueprintFeatureBase[] { psychic_proficiencies, psychic_knacks, detect_magic };
             psychic_progression.LevelEntries = entries.ToArray();
             BlueprintParametrizedFeature newArcana = library.Get<BlueprintParametrizedFeature>("4a2e8388c2f0dd3478811d9c947bebfb");
-            //Main.logger.Log($"New Arcana parametrized feature variable values. Number of parameter variables {newArcana.BlueprintParameterVariants.Length}. Disallow spells in spell list {newArcana.DisallowSpellsInSpellList}. Spell level {newArcana.SpellLevel}. CustomParameterVariants count {newArcana.CustomParameterVariants.Length}. SpecificSpellLevel {newArcana.SpecificSpellLevel}. SpellCasterClass {newArcana.SpellcasterClass.LocalizedName}. Spell list name {newArcana.SpellList.name}. Spell level penalty {newArcana.SpellLevelPenalty}.");
+            Main.logger.Log($"New Arcana parametrized feature variable values. Number of parameter variables {newArcana.BlueprintParameterVariants.Length}. Disallow spells in spell list {newArcana.DisallowSpellsInSpellList}. Spell level {newArcana.SpellLevel}. CustomParameterVariants count {newArcana.CustomParameterVariants.Length}. SpecificSpellLevel {newArcana.SpecificSpellLevel}. SpellCasterClass {newArcana.SpellcasterClass.LocalizedName}. Spell list name {newArcana.SpellList.name}. Spell level penalty {newArcana.SpellLevelPenalty}.");
             //foreach (BlueprintScriptableObject bso in newArcana.BlueprintParameterVariants)
             //    Main.logger.Log($" parameter variant {bso.name} of type {bso.GetType().ToString()}");
             //foreach (BlueprintComponent bc in newArcana.GetComponents<BlueprintComponent>())
@@ -216,7 +223,7 @@ namespace PsychicClassMod
             //    if(lsp!=null)
             //        Main.logger.Log($"Learn spell components specific spell level? {lsp.SpecificSpellLevel.ToString()} spell level {lsp.SpellLevel} caster class {lsp.SpellcasterClass.LocalizedName} spell level {lsp.SpellLevel} Spell level penalty {lsp.SpellLevelPenalty} spell list {lsp.SpellList.ToString()}");
             //}
-            
+
         }
 
         private static void createPhrenicAmplificationsFeatures()
