@@ -119,6 +119,7 @@
     <Compile Include="AdditionalHelpers.cs" />
     <Compile Include="ClassUpdates.cs" />
     <Compile Include="Core.cs" />
+    <Compile Include="DisciplineEngine.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="MetamagicExpansion.cs" />
     <Compile Include="PhrenicAmplificationContinuations.cs" />
