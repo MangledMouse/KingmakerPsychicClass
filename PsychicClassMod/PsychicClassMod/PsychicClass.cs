@@ -35,8 +35,8 @@ namespace PsychicClassMod
         static public BlueprintFeatureSelection psychic_bonus_spells_selector;
         static public BlueprintParametrizedFeature psychic_extra_spells_feature;
 
-        static public BlueprintFeatureSelection phrenic_amplifications_feature_charisma;
-        static public BlueprintFeatureSelection phrenic_amplifications_feature_wisdom;
+        static public BlueprintFeatureSelection phrenic_amplifications_feature;
+        //static public BlueprintFeatureSelection phrenic_amplifications_feature_wisdom;
         static public BlueprintAbilityResource phrenic_pool_resource_charisma;
         static public BlueprintAbilityResource phrenic_pool_resource_wisdom;
         static public BlueprintFeature phrenic_pool_display_feature_charisma;
@@ -50,22 +50,35 @@ namespace PsychicClassMod
         //the individual disciplines
         static public BlueprintProgression enlightenment_discipline;
         static public BlueprintProgression dream_discipline;
+        static public BlueprintProgression abomination_discipline;
 
-        //theAmplifications
-        static public BlueprintFeature focused_force;
-        static public BlueprintFeature ongoing_defense;
-        static public BlueprintFeature biokinetic_healing;
-        static public BlueprintFeature conjured_armor;
-        static public BlueprintFeature defensive_prognostication;
-        static public BlueprintFeature minds_eye;
-        static public BlueprintFeature overpowering_mind;
-        static public BlueprintFeature will_of_the_dead;
-        static public BlueprintFeature relentless_casting;
+        //theAmplifications, since they are fueled by different thing there need to be 2 each
+        static public BlueprintFeature[] charisma_amps;
+        static public BlueprintFeature focused_force_cha;
+        static public BlueprintFeature ongoing_defense_cha;
+        static public BlueprintFeature biokinetic_healing_cha;
+        static public BlueprintFeature conjured_armor_cha;
+        static public BlueprintFeature defensive_prognostication_cha;
+        static public BlueprintFeature minds_eye_cha;
+        static public BlueprintFeature overpowering_mind_cha;
+        static public BlueprintFeature will_of_the_dead_cha;
+        static public BlueprintFeature relentless_casting_cha;
+
+        static public BlueprintFeature[] wisdom_amps;
+        static public BlueprintFeature focused_force_wis;
+        static public BlueprintFeature ongoing_defense_wis;
+        static public BlueprintFeature biokinetic_healing_wis;
+        static public BlueprintFeature conjured_armor_wis;
+        static public BlueprintFeature defensive_prognostication_wis;
+        static public BlueprintFeature minds_eye_wis;
+        static public BlueprintFeature overpowering_mind_wis;
+        static public BlueprintFeature will_of_the_dead_wis;
+        static public BlueprintFeature relentless_casting_wis;
 
         //Feats
-        static public BlueprintFeature extra_amplification_feat_cha;
+        static public BlueprintFeature extra_amplification_feat;
         static public BlueprintFeature extra_phrenic_pool_feat_cha;
-        static public BlueprintFeature extra_amplification_feat_wis;
+        //static public BlueprintFeature extra_amplification_feat_wis;
         static public BlueprintFeature extra_phrenic_pool_feat_wis;
 
         public static bool test_mode = false;
@@ -128,7 +141,7 @@ namespace PsychicClassMod
                                                               "10 + 1/2 the psychic's level + the psychic's Intelligence modifier. \n" +
                                                               "Psychics also gain access to set a of techniques to empower their spell casting called phrenic amplifications. These techniques are used to empower " +
                                                               "psychic spellcasting and they are fueled by a pool of mental energy called the phrenic pool. " +
-                                                              "The total number of points available in the psychic's phrenic pool is based on either her Wisdom or Charisma score. Which of these stats is used is" +
+                                                              "The total number of points available in the psychic's phrenic pool is based on either her Wisdom or Charisma score. Which of these stats is used is " +
                                                               "determined by her discipline.",
                                                               "",
                                                               null,
@@ -259,8 +272,9 @@ namespace PsychicClassMod
                 icon,
                 FeatureGroup.BloodLine);
             discipline.Classes = getPsychicArray();
+            List<BlueprintFeature> level1Features = new List<BlueprintFeature>();
             //spells, discipline powers and the appropriate number of elements for phrenic amps
-            List<LevelEntry> entries = new List<LevelEntry>();
+            var entries = new List<LevelEntry>();
             //discipline.UIGroups = Helpers.CreateUIGroups();//
             discipline.UIGroups = new UIGroup[2] { Helpers.CreateUIGroup(), Helpers.CreateUIGroup() };
             //add discipline spells
@@ -277,7 +291,8 @@ namespace PsychicClassMod
                                                  spells[i].CreateAddKnownSpell(psychic_class, i + 1)
                                                  );
                 if (i == 0)
-                    entries.Add(Helpers.LevelEntry(1, feat));
+                    level1Features.Add(feat);
+                    //entries.Add(Helpers.LevelEntry(1, feat));
                 else
                     entries.Add(Helpers.LevelEntry(2 * (i + 1), feat));
                 discipline.UIGroups[0].Features.Add(feat);
@@ -286,40 +301,40 @@ namespace PsychicClassMod
             //add phrenic amp selections
             if (disciplineStat == StatType.Charisma)
             {
-                //discipline.UIGroups[0].Features.Add(phrenic_amplifications_feature_charisma);// = Helpers.CreateUIGroup();
                 discipline.UIGroups = discipline.UIGroups.AddToArray<UIGroup>(Helpers.CreateUIGroup(phrenic_pool_display_feature_charisma));
-                discipline.UIGroups[0].Features.Add(phrenic_pool_display_feature_charisma);
-                discipline.UIGroups[1].Features.Add(phrenic_amplifications_feature_charisma);
-                entries.Add(Helpers.LevelEntry(1, phrenic_pool_display_feature_charisma, phrenic_amplifications_feature_charisma));
-                for (int i = 3; i <= 20; i++)
-                {
-                    if ((i - 3) % 4 == 0)
-                    {
-                        entries.Add(Helpers.LevelEntry(i, phrenic_amplifications_feature_charisma));
-                        discipline.UIGroups[1].Features.Add(phrenic_amplifications_feature_charisma);
-                    }
-                    //else
-                    //    entries.Add(Helpers.LevelEntry(i));
-                }
+                level1Features.Add(phrenic_pool_display_feature_charisma);
+                //entries.Add();
+                discipline.UIGroups[1].Features.Add(phrenic_pool_display_feature_charisma);
+                phrenic_amplifications_feature.AddComponent(Helpers.CreateAddAbilityResource(phrenic_pool_resource_charisma));
+                phrenic_amplifications_feature.AllFeatures = phrenic_amplifications_feature.AllFeatures.AddToArray(charisma_amps);
             }
-            if (disciplineStat == StatType.Wisdom)
+            if(disciplineStat == StatType.Wisdom)
             {
                 discipline.UIGroups = discipline.UIGroups.AddToArray<UIGroup>(Helpers.CreateUIGroup(phrenic_pool_display_feature_wisdom));
-                discipline.UIGroups[1].Features.Add(phrenic_amplifications_feature_wisdom);
-                discipline.UIGroups[0].Features.Add(phrenic_pool_display_feature_wisdom);
-                entries.Add(Helpers.LevelEntry(1, phrenic_pool_display_feature_wisdom, phrenic_amplifications_feature_wisdom));
-                for (int i = 3; i <= 20; i++)
-                {
-                    if ((i - 3) % 4 == 0)
-                    {
-                        entries.Add(Helpers.LevelEntry(i, phrenic_amplifications_feature_wisdom));
-                        discipline.UIGroups[1].Features.Add(phrenic_amplifications_feature_wisdom);
-                    }
-                    //else
-                    //    entries.Add(Helpers.LevelEntry(i));
-                }
+                discipline.UIGroups[1].Features.Add(phrenic_pool_display_feature_wisdom);
+                level1Features.Add(phrenic_pool_display_feature_wisdom);
+                //entries.Add(Helpers.LevelEntry(1, phrenic_pool_display_feature_wisdom));
+                phrenic_amplifications_feature.AddComponent(Helpers.CreateAddAbilityResource(phrenic_pool_resource_wisdom));
+                phrenic_amplifications_feature.AllFeatures = phrenic_amplifications_feature.AllFeatures.AddToArray(wisdom_amps);
             }
-
+            //if (disciplineStat == StatType.Wisdom)
+            //{
+            //    discipline.UIGroups = discipline.UIGroups.AddToArray<UIGroup>(Helpers.CreateUIGroup(phrenic_pool_display_feature_wisdom));
+            //    discipline.UIGroups[1].Features.Add(phrenic_amplifications_feature_wisdom);
+            //    discipline.UIGroups[0].Features.Add(phrenic_pool_display_feature_wisdom);
+            //    entries.Add(Helpers.LevelEntry(1, phrenic_pool_display_feature_wisdom, phrenic_amplifications_feature_wisdom));
+            //    for (int i = 3; i <= 20; i++)
+            //    {
+            //        if ((i - 3) % 4 == 0)
+            //        {
+            //            entries.Add(Helpers.LevelEntry(i, phrenic_amplifications_feature_wisdom));
+            //            discipline.UIGroups[1].Features.Add(phrenic_amplifications_feature_wisdom);
+            //        }
+            //        //else
+            //        //    entries.Add(Helpers.LevelEntry(i));
+            //    }
+            //}
+            entries.Add(Helpers.LevelEntry(1, level1Features));
             discipline.LevelEntries = entries.ToArray();
             return discipline;
         }
@@ -327,34 +342,34 @@ namespace PsychicClassMod
 
         private static void createPsychicFeats()
         {
-            var extra_amplification_selection_cha = Helpers.CreateFeatureSelection("ExtraAmplificationFeatCharismaPsychic",
-                "Extra Phrenic Amplification (Charisma Psychic)",
+            var extra_amplification_selection = Helpers.CreateFeatureSelection("ExtraAmplificationFeatCharismaPsychic",
+                "Extra Phrenic Amplification",
                 "You gain one additional phrenic amplification.\n" +
                 "Special: you can take this feat multiple times. Each time you do gain another amplfication.",
                 "",
                 null,
                 FeatureGroup.Feat,
                 //this should be a prerequisite features from list with number 1 and it should be either phrenic amps feature cha or phrenic amps feature wis
-                phrenic_amplifications_feature_charisma.PrerequisiteFeature()
+                phrenic_amplifications_feature.PrerequisiteFeature()
                 ) ;
-            var extra_amplification_selection_wis = Helpers.CreateFeatureSelection("ExtraAmplificationFeatWisdomPsychic",
-                "Extra Phrenic Amplification (Wisdom Psychic)",
-                "You gain one additional phrenic amplification.\n" +
-                "Special: you can take this feat multiple times. Each time you do gain another amplfication.",
-                "",
-                null,
-                FeatureGroup.Feat,
-                //this should be a prerequisite features from list with number 1 and it should be either phrenic amps feature cha or phrenic amps feature wis
-                phrenic_amplifications_feature_charisma.PrerequisiteFeature()
-                );
-            extra_amplification_selection_cha.AllFeatures = phrenic_amplifications_feature_charisma.AllFeatures;
-            extra_amplification_feat_cha = extra_amplification_selection_cha;
-            extra_amplification_feat_cha.Ranks = 10;
-            extra_amplification_feat_cha.Groups = new FeatureGroup[] { FeatureGroup.Feat };
-            extra_amplification_selection_wis.AllFeatures = phrenic_amplifications_feature_wisdom.AllFeatures;
-            extra_amplification_feat_wis = extra_amplification_selection_cha;
-            extra_amplification_feat_wis.Ranks = 10;
-            extra_amplification_feat_wis.Groups = new FeatureGroup[] { FeatureGroup.Feat };
+            //var extra_amplification_selection_wis = Helpers.CreateFeatureSelection("ExtraAmplificationFeatWisdomPsychic",
+            //    "Extra Phrenic Amplification (Wisdom Psychic)",
+            //    "You gain one additional phrenic amplification.\n" +
+            //    "Special: you can take this feat multiple times. Each time you do gain another amplfication.",
+            //    "",
+            //    null,
+            //    FeatureGroup.Feat,
+            //    //this should be a prerequisite features from list with number 1 and it should be either phrenic amps feature cha or phrenic amps feature wis
+            //    phrenic_pool_display_feature_wisdom.PrerequisiteFeature()
+            //    );
+            extra_amplification_selection.AllFeatures = phrenic_amplifications_feature.AllFeatures;
+            extra_amplification_feat = extra_amplification_selection;
+            extra_amplification_feat.Ranks = 10;
+            extra_amplification_feat.Groups = new FeatureGroup[] { FeatureGroup.Feat };
+            //extra_amplification_selection_wis.AllFeatures = phrenic_amplifications_feature_wisdom.AllFeatures;
+            //extra_amplification_feat_wis = extra_amplification_selection_cha;
+            //extra_amplification_feat_wis.Ranks = 10;
+            //extra_amplification_feat_wis.Groups = new FeatureGroup[] { FeatureGroup.Feat };
 
             var extra_phrenic_pool_feat_cha = Helpers.CreateFeature("ExpandedPhrenicPoolFeatCharisma",
                 "Expanded Phrenic Pool (Charisma)",
@@ -377,7 +392,7 @@ namespace PsychicClassMod
                 Helpers.Create<IncreaseResourceAmount>(i => { i.Resource = phrenic_pool_resource_wisdom; i.Value = 2; })
                 );
 
-            library.AddFeats(extra_amplification_feat_cha, extra_phrenic_pool_feat_cha, extra_amplification_feat_wis, extra_phrenic_pool_feat_wis);
+            library.AddFeats(extra_amplification_feat, extra_phrenic_pool_feat_cha, extra_phrenic_pool_feat_wis);
         }
 
         private static void createPsychicExtraSpellsFeatures()
@@ -435,6 +450,7 @@ namespace PsychicClassMod
                 psychic_knacks, 
                 detect_magic,
                 psychic_disciplines,
+                phrenic_amplifications_feature,
                 //phrenic_pool_display_feature, 
                 //phrenic_amplifications_feature,
                 library.Get<BlueprintFeature>("d3e6275cfa6e7a04b9213b7b292a011c"), // ray calculate feature
@@ -442,7 +458,6 @@ namespace PsychicClassMod
                 library.Get<BlueprintFeature>("9fc9813f569e2e5448ddc435abf774b3") //full caster feature
                 ));
 
-           
             psychic_progression.UIGroups = psychic_progression.UIGroups.AddToArray<UIGroup>(Helpers.CreateUIGroup(psychic_extra_spells_feature));
             entries.Add(Helpers.LevelEntry(2, psychic_bonus_spells_selector));
             psychic_progression.UIGroups[0].Features.Add(psychic_bonus_spells_selector);
@@ -450,6 +465,21 @@ namespace PsychicClassMod
             psychic_progression.UIGroups[0].Features.Add(psychic_bonus_spells_selector);
             entries.Add(Helpers.LevelEntry(17, psychic_bonus_spells_selector));
             psychic_progression.UIGroups[0].Features.Add(psychic_bonus_spells_selector);
+
+            psychic_progression.UIGroups = psychic_progression.UIGroups.AddToArray<UIGroup>(Helpers.CreateUIGroup(phrenic_amplifications_feature));
+            psychic_progression.UIGroups[1].Features.Add(phrenic_amplifications_feature);
+            //entries.Add(Helpers.LevelEntry(1, phrenic_amplifications_feature));
+            for (int i = 3; i <= 20; i++)
+            {
+                if ((i - 3) % 4 == 0)
+                {
+                    entries.Add(Helpers.LevelEntry(i, phrenic_amplifications_feature));
+                    psychic_progression.UIGroups[1].Features.Add(phrenic_amplifications_feature);
+                }
+                //else
+                //    entries.Add(Helpers.LevelEntry(i));
+            }
+
             psychic_progression.UIDeterminatorsGroup = new BlueprintFeatureBase[] { psychic_disciplines, psychic_proficiencies, psychic_knacks, detect_magic };
             psychic_progression.LevelEntries = entries.ToArray();
             //BlueprintParametrizedFeature newArcana = library.Get<BlueprintParametrizedFeature>("4a2e8388c2f0dd3478811d9c947bebfb");
@@ -489,63 +519,42 @@ namespace PsychicClassMod
             phrenic_pool_resource_wisdom.SetIncreasedByLevelStartPlusDivStepAndStatBonus(0, 2, 1, 2, 1, 0, 0.0f, getPsychicArray(), StatType.Wisdom);
             phrenic_pool_resource_charisma.SetIncreasedByLevelStartPlusDivStepAndStatBonus(0, 2, 1, 2, 1, 0, 0.0f, getPsychicArray(), StatType.Charisma);
 
-            var phrenic_amplifications_engine = new PhrenicAmplificationContinuations(phrenic_pool_resource_charisma, psychic_spellbook, psychic_class, "Psychic");
-            
-            biokinetic_healing = phrenic_amplifications_engine.createBiokineticHealing();
-            conjured_armor = phrenic_amplifications_engine.createConjuredArmor();
-            defensive_prognostication = phrenic_amplifications_engine.createDefensivePrognostication();
-            focused_force = phrenic_amplifications_engine.createFocusedForce();
-            minds_eye = phrenic_amplifications_engine.createMindsEye();
-            ongoing_defense = phrenic_amplifications_engine.createOngoingDefense();
-            overpowering_mind = phrenic_amplifications_engine.createOverpoweringMind();
-            relentless_casting = phrenic_amplifications_engine.createRelentlessCasting();
-            will_of_the_dead = phrenic_amplifications_engine.createWillOfTheDead();
-
-            phrenic_amplifications_feature_charisma = Helpers.CreateFeatureSelection("PsychicCharismaPhrenicAmplificationsFeature",
+            phrenic_amplifications_feature = Helpers.CreateFeatureSelection("PsychicCharismaPhrenicAmplificationsFeature",
                "Phrenic Amplifications",
                "A psychic develops particular techniques to empower her spellcasting, called phrenic amplifications. The psychic can activate a phrenic amplification only while casting a spell using psychic magic, and the amplification modifies either the spell’s effects or the process of casting it. The spell being cast is called the linked spell. The psychic can activate only one amplification each time she casts a spell, and doing so is part of the action used to cast the spell. She can use any amplification she knows with any psychic spell, unless the amplification’s description states that it can be linked only to certain types of spells. A psychic learns one phrenic amplification at 1st level. At 3rd level and every 4 levels thereafter, the psychic learns a new phrenic amplification. A phrenic amplification can’t be selected more than once. Once a phrenic amplification has been selected, it can’t be changed. Phrenic amplifications require the psychic to expend 1 or more points from her phrenic pool to function.",
                "",
                null,
-               FeatureGroup.None,
-               //this should presumably do some check against the type of the psychic (maybe i want to make Wisdom psychic as its own archetype since i dont' want to make individual archetypes anyway?)
-               Helpers.CreateAddAbilityResource(phrenic_pool_resource_charisma)
+               FeatureGroup.None
                );
 
-            phrenic_amplifications_feature_charisma.AllFeatures = new BlueprintFeature[]
-                {
-                biokinetic_healing,
-                conjured_armor,
-                defensive_prognostication,
-                focused_force,
-                minds_eye,
-                overpowering_mind,
-                will_of_the_dead,
-                ongoing_defense,
-                relentless_casting
-                };
+            phrenic_amplifications_feature.AllFeatures = new BlueprintFeature[0];
+            var phrenic_amplifications_engine_cha = new PhrenicAmplificationContinuations(phrenic_pool_resource_charisma, psychic_spellbook, psychic_class, "CharismaPsychic");
 
-            phrenic_amplifications_feature_wisdom = Helpers.CreateFeatureSelection("PsychicWisdomPhrenicAmplificationsFeature",
-                "Phrenic Amplifications",
-                "A psychic develops particular techniques to empower her spellcasting, called phrenic amplifications. The psychic can activate a phrenic amplification only while casting a spell using psychic magic, and the amplification modifies either the spell’s effects or the process of casting it. The spell being cast is called the linked spell. The psychic can activate only one amplification each time she casts a spell, and doing so is part of the action used to cast the spell. She can use any amplification she knows with any psychic spell, unless the amplification’s description states that it can be linked only to certain types of spells. A psychic learns one phrenic amplification at 1st level. At 3rd level and every 4 levels thereafter, the psychic learns a new phrenic amplification. A phrenic amplification can’t be selected more than once. Once a phrenic amplification has been selected, it can’t be changed. Phrenic amplifications require the psychic to expend 1 or more points from her phrenic pool to function.",
-                "",
-                null,
-                FeatureGroup.None,
-                //this should presumably do some check against the type of the psychic (maybe i want to make Wisdom psychic as its own archetype since i dont' want to make individual archetypes anyway?)
-                Helpers.CreateAddAbilityResource(phrenic_pool_resource_wisdom)
-                );
+            biokinetic_healing_cha = phrenic_amplifications_engine_cha.createBiokineticHealing();
+            conjured_armor_cha = phrenic_amplifications_engine_cha.createConjuredArmor();
+            defensive_prognostication_cha = phrenic_amplifications_engine_cha.createDefensivePrognostication();
+            focused_force_cha = phrenic_amplifications_engine_cha.createFocusedForce();
+            minds_eye_cha = phrenic_amplifications_engine_cha.createMindsEye();
+            ongoing_defense_cha = phrenic_amplifications_engine_cha.createOngoingDefense();
+            overpowering_mind_cha = phrenic_amplifications_engine_cha.createOverpoweringMind();
+            relentless_casting_cha = phrenic_amplifications_engine_cha.createRelentlessCasting();
+            will_of_the_dead_cha = phrenic_amplifications_engine_cha.createWillOfTheDead();
+            charisma_amps = new BlueprintFeature[] { biokinetic_healing_cha, conjured_armor_cha, defensive_prognostication_cha, focused_force_cha, minds_eye_cha, ongoing_defense_cha, overpowering_mind_cha, relentless_casting_cha, will_of_the_dead_cha };
+            AdditionalHelpers.AscribeRequiredFeature(charisma_amps, phrenic_pool_display_feature_charisma);
 
-            phrenic_amplifications_feature_wisdom.AllFeatures = new BlueprintFeature[]
-               {
-                biokinetic_healing,
-                conjured_armor,
-                defensive_prognostication,
-                focused_force,
-                minds_eye,
-                overpowering_mind,
-                will_of_the_dead,
-                ongoing_defense,
-                relentless_casting
-               };
+            var phrenic_amplifications_engine_wis = new PhrenicAmplificationContinuations(phrenic_pool_resource_wisdom, psychic_spellbook, psychic_class, "WisdomPsychic");
+
+            biokinetic_healing_wis = phrenic_amplifications_engine_wis.createBiokineticHealing();
+            conjured_armor_wis = phrenic_amplifications_engine_wis.createConjuredArmor();
+            defensive_prognostication_wis = phrenic_amplifications_engine_wis.createDefensivePrognostication();
+            focused_force_wis = phrenic_amplifications_engine_wis.createFocusedForce();
+            minds_eye_wis = phrenic_amplifications_engine_wis.createMindsEye();
+            ongoing_defense_wis = phrenic_amplifications_engine_wis.createOngoingDefense();
+            overpowering_mind_wis = phrenic_amplifications_engine_wis.createOverpoweringMind();
+            relentless_casting_wis = phrenic_amplifications_engine_wis.createRelentlessCasting();
+            will_of_the_dead_wis = phrenic_amplifications_engine_wis.createWillOfTheDead();
+            wisdom_amps = new BlueprintFeature[] { biokinetic_healing_wis, conjured_armor_wis, defensive_prognostication_wis, focused_force_wis, minds_eye_wis, ongoing_defense_wis, overpowering_mind_wis, relentless_casting_wis, will_of_the_dead_wis};
+            AdditionalHelpers.AscribeRequiredFeature(wisdom_amps, phrenic_pool_display_feature_wisdom);
 
             //Investigator.phrenic_dabbler.AllFeatures;
             //condiser the implementation of potent magic in CallOfTheWild to see how you probably want to implement the conditional stat
@@ -624,7 +633,6 @@ namespace PsychicClassMod
                 {
                     //this pulls every spell from the Psychic Detective list and adds them 
                     //except for the two early access spells namely find traps and banishment
-
                     if (spell.AssetGuid != "4709274b2080b6444a3c11c6ebbe2404" && spell.AssetGuid != "d361391f645db984bbf58907711a146a")
                     {
                         //Main.logger.Log($"Spell to add {spell.Name} with type {spell.GetType().ToString()}");

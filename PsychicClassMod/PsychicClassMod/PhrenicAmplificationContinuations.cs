@@ -59,5 +59,6 @@ namespace PsychicClassMod
             //feature.AddComponent(Helpers.Create<CallOfTheWild.OnCastMechanics.ForceFocusSpellDamageDiceIncrease>(s => { s.spellbook = spellbook; }));
             return feature;
         }
+
     }
 }
