@@ -295,23 +295,23 @@ namespace PsychicClassMod
                     //entries.Add(Helpers.LevelEntry(1, feat));
                 else
                     entries.Add(Helpers.LevelEntry(2 * (i + 1), feat));
-                discipline.UIGroups[0].Features.Add(feat);
+                discipline.UIGroups[1].Features.Add(feat);
             }
 
             //add phrenic amp selections
             if (disciplineStat == StatType.Charisma)
             {
-                discipline.UIGroups = discipline.UIGroups.AddToArray<UIGroup>(Helpers.CreateUIGroup(phrenic_pool_display_feature_charisma));
+                //discipline.UIGroups = discipline.UIGroups.AddToArray<UIGroup>(Helpers.CreateUIGroup(phrenic_pool_display_feature_charisma));
                 level1Features.Add(phrenic_pool_display_feature_charisma);
                 //entries.Add();
-                discipline.UIGroups[1].Features.Add(phrenic_pool_display_feature_charisma);
+                discipline.UIGroups[0].Features.Add(phrenic_pool_display_feature_charisma);
                 phrenic_amplifications_feature.AddComponent(Helpers.CreateAddAbilityResource(phrenic_pool_resource_charisma));
                 phrenic_amplifications_feature.AllFeatures = phrenic_amplifications_feature.AllFeatures.AddToArray(charisma_amps);
             }
             if(disciplineStat == StatType.Wisdom)
             {
-                discipline.UIGroups = discipline.UIGroups.AddToArray<UIGroup>(Helpers.CreateUIGroup(phrenic_pool_display_feature_wisdom));
-                discipline.UIGroups[1].Features.Add(phrenic_pool_display_feature_wisdom);
+                //discipline.UIGroups = discipline.UIGroups.AddToArray<UIGroup>(Helpers.CreateUIGroup(phrenic_pool_display_feature_wisdom));
+                discipline.UIGroups[0].Features.Add(phrenic_pool_display_feature_wisdom);
                 level1Features.Add(phrenic_pool_display_feature_wisdom);
                 //entries.Add(Helpers.LevelEntry(1, phrenic_pool_display_feature_wisdom));
                 phrenic_amplifications_feature.AddComponent(Helpers.CreateAddAbilityResource(phrenic_pool_resource_wisdom));
@@ -334,7 +334,7 @@ namespace PsychicClassMod
             //        //    entries.Add(Helpers.LevelEntry(i));
             //    }
             //}
-            entries.Add(Helpers.LevelEntry(1, level1Features));
+            entries.Insert(0,Helpers.LevelEntry(1, level1Features));
             discipline.LevelEntries = entries.ToArray();
             return discipline;
         }
