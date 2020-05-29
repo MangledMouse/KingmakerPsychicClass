@@ -43,7 +43,15 @@ namespace PsychicClassMod
             setMaxAmount(resource, amount);
         }
     }
-    class AdditionalHelpers
+    static class AdditionalHelpers
     {
+        public static void AscribeRequiredFeature(BlueprintFeature[] featuresToGetRequirement, BlueprintFeature requiredFeature)
+        {
+            foreach (BlueprintFeature bf in featuresToGetRequirement)
+            {
+                bf.AddComponent(requiredFeature.PrerequisiteFeature());
+            }
+            //return null;
+        }
     }
 }

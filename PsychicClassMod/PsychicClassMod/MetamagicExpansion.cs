@@ -20,6 +20,7 @@ namespace PsychicClassMod
             RelentlessCasting = 0x00000080
         }
 
+
         //public static void load()
         //{
         //}
